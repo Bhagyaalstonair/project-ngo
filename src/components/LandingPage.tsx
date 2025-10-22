@@ -600,7 +600,7 @@ export function LandingPage() {
               </div>
               <div className="relative">
                 <img
-                  src="public/kid-writes-book-classroom (1).jpg"
+                  src="kid-writes-book-classroom (1).jpg"
                   alt="Digital Literacy Training"
                   className="w-full h-full object-cover"
                 />
