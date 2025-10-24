@@ -321,7 +321,7 @@ export function Settings() {
             </div>
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-gray-900">{user?.name || 'User'}</h2>
-              <p className="text-gray-600">{user?.position || 'Position'} • {user?.organization || 'Organization'}</p>
+              <p className="text-gray-600">{user?.role === 'admin' && user?.position === 'Director' ? 'Administrator' : user?.position || 'Position'} • {user?.organization || 'Organization'}</p>
               <p className="text-sm text-gray-500 mt-1">Member since 2021</p>
             </div>
             <button 

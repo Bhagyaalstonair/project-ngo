@@ -1,4 +1,6 @@
 // Shared campaign data management
+import { getCategoryImage } from './categoryImages';
+
 export interface Campaign {
   id: string;
   title: string;
@@ -25,7 +27,7 @@ let campaigns: Campaign[] = [
     category: 'education',
     status: 'urgent',
     createdDate: '2024-12-01',
-    image: 'https://images.unsplash.com/photo-1497486751825-1233686d5d80?w=400&h=300&fit=crop'
+    image: getCategoryImage('education')
   },
   {
     id: '2',
@@ -38,7 +40,7 @@ let campaigns: Campaign[] = [
     category: 'water',
     status: 'completed',
     createdDate: '2024-11-01',
-    image: 'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400&h=300&fit=crop'
+    image: getCategoryImage('water')
   },
   {
     id: '3',
@@ -51,7 +53,7 @@ let campaigns: Campaign[] = [
     category: 'healthcare',
     status: 'active',
     createdDate: '2024-12-15',
-    image: 'https://images.unsplash.com/photo-1559757148-5c350d0d3c56?w=400&h=300&fit=crop'
+    image: getCategoryImage('healthcare')
   },
   {
     id: '4',
@@ -64,7 +66,7 @@ let campaigns: Campaign[] = [
     category: 'food',
     status: 'urgent',
     createdDate: '2025-01-01',
-    image: 'https://images.unsplash.com/photo-1488459716781-31db52582fe9?w=400&h=300&fit=crop'
+    image: getCategoryImage('food')
   },
   {
     id: '5',

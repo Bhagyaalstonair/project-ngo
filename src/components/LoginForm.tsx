@@ -21,7 +21,7 @@ export function LoginForm() {
   };
 
   const demoAccounts = [
-    { role: 'admin', email: 'admin@ngoindia.org', name: 'NGO India - Director' },
+    { role: 'admin', email: 'admin@ngoindia.org', name: 'NGO India - Administrator' },
     { role: 'executive', email: 'executive@ngoindia.org', name: 'NGO India - Executive Director' },
     { role: 'employee', email: 'employee@ngoindia.org', name: 'NGO India - Employee' }
   ];

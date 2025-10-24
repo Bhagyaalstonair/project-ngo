@@ -107,7 +107,7 @@ export function JoinPage() {
   const roleOptions = [
     {
       id: 'admin',
-      title: 'Director',
+      title: 'Administrator',
       description: 'Lead programs, track donations, and monitor projects',
       icon: Users,
       color: 'text-blue-600',
