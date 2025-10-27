@@ -4,7 +4,7 @@ export interface User {
   id: string;
   name: string;
   email: string;
-  role: 'admin' | 'executive' | 'employee';
+  role: 'admin' | 'executive' | 'employee' | 'director';
   avatar?: string;
   profileImage?: string;
   department?: string;
@@ -28,7 +28,7 @@ interface RegisterData {
   name: string;
   email: string;
   password: string;
-  role: 'admin' | 'executive' | 'employee';
+  role: 'admin' | 'executive' | 'employee' | 'director';
   phone: string;
   address: string;
   organization?: string;
@@ -106,6 +106,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           address: 'Ahmedabad, Gujarat',
           organization: 'NGO India',
           experience: '3 years in field work'
+        },
+        {
+          id: '4',
+          name: 'NGO India',
+          email: 'director@ngoindia.org',
+          role: 'director',
+          department: 'Leadership',
+          position: 'Director',
+          phone: '+91 98765 43213',
+          address: 'Bangalore, Karnataka',
+          organization: 'NGO India',
+          experience: '15 years in social leadership'
         }
       ];
       storeUsers(demoUsers);
@@ -122,42 +134,78 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  // Define role-specific email validation
-  const validateRoleEmail = (email: string, selectedRole: string): boolean => {
-    const roleEmailMap: { [key: string]: string[] } = {
-      'admin': ['admin@ngoindia.org'],
-      'executive': ['executive@ngoindia.org'],
-      'employee': ['employee@ngoindia.org']
-      // Director role is excluded as requested
+  // Define role-specific email and password validation
+  const validateCredentials = (email: string, password: string, selectedRole: string): boolean => {
+    const validCredentials: { [key: string]: { email: string; password: string } } = {
+      'admin': { email: 'admin@ngoindia.org', password: 'ngoindia123' },
+      'executive': { email: 'executive@ngoindia.org', password: 'ngoindia123' },
+      'employee': { email: 'employee@ngoindia.org', password: 'ngoindia123' },
+      'director': { email: 'director@ngoindia.org', password: 'ngoindia123' }
     };
     
-    const allowedEmails = roleEmailMap[selectedRole.toLowerCase()];
-    return allowedEmails ? allowedEmails.includes(email.toLowerCase()) : false;
+    const roleKey = selectedRole.toLowerCase();
+    const validCred = validCredentials[roleKey];
+    
+    return validCred && 
+           validCred.email === email.toLowerCase() && 
+           validCred.password === password;
   };
 
   const login = async (email: string, password: string, selectedRole: string): Promise<boolean> => {
     setIsLoading(true);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // First validate if the email is allowed for the selected role
-    if (!validateRoleEmail(email, selectedRole)) {
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Validate credentials
+      if (!validateCredentials(email, password, selectedRole)) {
+        setIsLoading(false);
+        return false;
+      }
+      
+      const users = getStoredUsers();
+      const roleKey = selectedRole.toLowerCase() as 'admin' | 'executive' | 'employee' | 'director';
+      let foundUser = users.find(u => u.email === email.toLowerCase() && u.role === roleKey);
+      
+      // If user doesn't exist in storage but credentials are valid, create them
+      if (!foundUser && validateCredentials(email, password, selectedRole)) {
+        foundUser = {
+          id: Date.now().toString(),
+          name: 'NGO India',
+          email: email.toLowerCase(),
+          role: roleKey,
+          department: roleKey === 'admin' ? 'Program Management' : 
+                     roleKey === 'executive' ? 'Executive' : 
+                     roleKey === 'director' ? 'Leadership' : 'Field Operations',
+          position: roleKey === 'admin' ? 'Administrator' : 
+                   roleKey === 'executive' ? 'Executive Director' : 
+                   roleKey === 'director' ? 'Director' : 'Employee',
+          phone: '+91 98765 43210',
+          address: 'India',
+          organization: 'NGO India',
+          experience: '5+ years'
+        };
+        
+        // Add to stored users
+        const updatedUsers = [...users, foundUser];
+        storeUsers(updatedUsers);
+      }
+      
+      if (foundUser) {
+        setUser(foundUser);
+        storeCurrentUser(foundUser);
+        setIsLoading(false);
+        return true;
+      }
+      
+      setIsLoading(false);
+      return false;
+    } catch (error) {
+      console.error('Login error:', error);
       setIsLoading(false);
       return false;
     }
-    
-    const users = getStoredUsers();
-    const foundUser = users.find(u => u.email === email.toLowerCase() && u.role === selectedRole.toLowerCase());
-    if (foundUser) {
-      setUser(foundUser);
-      storeCurrentUser(foundUser); // Save user to localStorage
-      setIsLoading(false);
-      return true;
-    }
-    
-    setIsLoading(false);
-    return false;
   };
 
   const register = async (userData: RegisterData): Promise<boolean> => {

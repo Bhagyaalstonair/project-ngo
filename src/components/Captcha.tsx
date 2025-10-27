@@ -12,7 +12,7 @@ export function Captcha({ onVerify }: CaptchaProps) {
   const generateCaptcha = () => {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     let result = '';
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 4; i++) {
       result += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     setCaptchaText(result);
@@ -25,7 +25,7 @@ export function Captcha({ onVerify }: CaptchaProps) {
   }, []);
 
   useEffect(() => {
-    onVerify(userInput === captchaText);
+    onVerify(userInput.toUpperCase() === captchaText.toUpperCase());
   }, [userInput, captchaText, onVerify]);
 
   return (
@@ -40,7 +40,7 @@ export function Captcha({ onVerify }: CaptchaProps) {
         <button
           type="button"
           onClick={generateCaptcha}
-          className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+          className="px-3 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-gray-600 hover:text-gray-800"
           title="Refresh captcha"
         >
           <RefreshCw className="w-4 h-4" />
@@ -50,8 +50,9 @@ export function Captcha({ onVerify }: CaptchaProps) {
         type="text"
         value={userInput}
         onChange={(e) => setUserInput(e.target.value)}
-        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
-        placeholder="Enter the captcha text"
+        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors text-gray-900 placeholder-gray-500 uppercase"
+        placeholder="Enter the captcha text (case insensitive)"
+        style={{ textTransform: 'uppercase' }}
         required
       />
     </div>
