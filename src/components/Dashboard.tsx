@@ -13,6 +13,7 @@ import { Settings } from './modules/Settings';
 import { Reports } from './modules/Reports';
 import { BeneficiaryImpactTracking } from './modules/BeneficiaryImpactTracking';
 import { FcraCompliance } from './modules/FcraCompliance';
+import { ComplianceModule } from './modules/ComplianceModule';
 import { useAuth } from '../contexts/AuthContext';
 import RegisterNGO from './modules/RegisterNGO';
 import { KnowledgeHub } from './KnowledgeHub';
