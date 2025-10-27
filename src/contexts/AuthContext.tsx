@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           email: 'admin@ngoindia.org',
           role: 'admin',
           department: 'Program Management',
-          position: 'Director',
+          position: 'Administrator',
           phone: '+91 98765 43210',
           address: 'Mumbai, Maharashtra',
           organization: 'NGO India',
@@ -187,7 +187,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         experience: userData.experience,
         department: userData.role === 'admin' ? 'Program Management' : 
                    userData.role === 'executive' ? 'Executive' : 'Field Operations',
-        position: userData.role === 'admin' ? 'Director' : 
+        position: userData.role === 'admin' ? 'Administrator' : 
                  userData.role === 'executive' ? 'Executive Director' : 'Employee',
         avatar: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=150&h=150&dpr=1'
       };

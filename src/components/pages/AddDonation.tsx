@@ -96,7 +96,7 @@ export function AddDonation() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-orange-600 mb-2">Donor Type *</label>
+              <label className="block text-sm font-medium text-orange-600 mb-2">Donor Type</label>
               <select
                 value={formData.donationType}
                 onChange={(e) => setFormData({ ...formData, donationType: e.target.value })}

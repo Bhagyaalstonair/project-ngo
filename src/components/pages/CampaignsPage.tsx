@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, Filter, Calendar, Users, Target, TrendingUp, ArrowLeft, Plus } from 'lucide-react';
 import { getCampaigns, getStats, Campaign } from '../../utils/campaignData';
+import { getCategoryImage } from '../../utils/categoryImages';
 
 export function CampaignsPage() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -169,16 +170,17 @@ export function CampaignsPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredCampaigns.map((campaign) => {
             const progressPercentage = getProgressPercentage(campaign.raised, campaign.goal);
+            const fallbackImage = getCategoryImage(campaign.category);
             
             return (
               <div key={campaign.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
                 <div className="relative">
                   <img 
-                    src={campaign.image || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=300&fit=crop'} 
+                    src={campaign.image || fallbackImage} 
                     alt={campaign.title}
                     className="w-full h-48 object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=400&h=300&fit=crop';
+                      e.currentTarget.src = fallbackImage;
                     }}
                   />
                   <div className={`absolute top-4 right-4 px-3 py-1 rounded-full text-white text-sm font-medium ${getStatusColor(campaign.status)}`}>

@@ -105,9 +105,7 @@ export function DonatePage() {
       }
     }
 
-    if (!formData.purpose.trim()) {
-      newErrors.purpose = 'Purpose is required';
-    }
+
 
     // Validate donor type specific fields
     if (formData.donorType === 'family') {
@@ -1093,7 +1091,7 @@ export function DonatePage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Users className="w-4 h-4 inline mr-2" />
-                      Donor Type *
+                      Donor Type
                     </label>
                     <select
                       value={formData.donorType}
@@ -1311,7 +1309,7 @@ export function DonatePage() {
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       <Target className="w-4 h-4 inline mr-2" />
-                      Purpose *
+                      Purpose
                     </label>
                     <input
                       type="text"
