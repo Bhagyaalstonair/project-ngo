@@ -11,7 +11,7 @@ interface LoginModalProps {
 }
  
 const roles = [
-  { name: 'Director', color: 'from-orange-500 to-orange-600', dashboard: '/director-dashboard' },
+  { name: 'Director', color: 'from-orange-500 to-orange-600', dashboard: '/' },
   { name: 'Executive', color: 'from-orange-400 to-orange-500', dashboard: '/executive-dashboard' },
   { name: 'Employee', color: 'from-orange-300 to-orange-400', dashboard: '/employee-dashboard' },
   { name: 'Admin', color: 'from-orange-600 to-orange-700', dashboard: '/admin-dashboard' },
@@ -51,12 +51,19 @@ export function LoginModal({ onClose }: LoginModalProps) {
       setError('Please select a role first.');
       return;
     }
- 
-    const success = await login(email.trim(), password, selectedRole);
+
+    const success = await login(email.trim(), password, selectedRole.toLowerCase());
     if (!success) {
-      setError(`Invalid credentials for ${selectedRole} role. Please check your email and try again.`);
+      setError(`Invalid credentials for ${selectedRole} role. Please check your email and password.`);
     } else {
-      window.location.href = roles.find(r => r.name === selectedRole)?.dashboard || '/';
+      // Close modal and redirect to dashboard
+      onClose();
+      if (selectedRole === 'Director') {
+        // Director stays on main page for now
+        window.location.href = '/';
+      } else {
+        window.location.href = roles.find(r => r.name === selectedRole)?.dashboard || '/';
+      }
     }
   };
  
@@ -67,22 +74,12 @@ export function LoginModal({ onClose }: LoginModalProps) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.3 }}
-<<<<<<< HEAD
-        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative overflow-hidden max-h-[90vh] overflow-y-auto scrollbar-thin scrollbar-thumb-transparent scrollbar-track-transparent hover:scrollbar-thumb-gray-400 hover:scrollbar-track-gray-200"
-=======
         className="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative overflow-hidden max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative overflow-hidden max-h-[90vh] overflow-y-auto scrollbar-hide"
         style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'transparent transparent',
-          transition: 'scrollbar-color 0.3s ease'
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.scrollbarColor = '#9ca3af #e5e7eb';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.scrollbarColor = 'transparent transparent';
-        }}
->>>>>>> 638795922db5e21bf91e77f5cc69e0f7e8f59d2a
       >
         {/* Close Button */}
         <button
@@ -169,18 +166,20 @@ export function LoginModal({ onClose }: LoginModalProps) {
                       id="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
-                      placeholder={selectedRole === 'Admin' ? 'admin@ngoindia.org' :
-                                 selectedRole === 'Executive' ? 'executive@ngoindia.org' :
-                                 selectedRole === 'Employee' ? 'employee@ngoindia.org' :
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors text-gray-900 placeholder-gray-500"
+                      placeholder={selectedRole === 'Admin' ? 'admin@ngoindia.org' : 
+                                 selectedRole === 'Executive' ? 'executive@ngoindia.org' : 
+                                 selectedRole === 'Employee' ? 'employee@ngoindia.org' : 
+                                 selectedRole === 'Director' ? 'director@ngoindia.org' :
                                  'Enter your email'}
                       required
                     />
                     {selectedRole && (
                       <p className="text-xs text-gray-500 mt-1">
-                        Use {selectedRole === 'Admin' ? 'admin@ngoindia.org' :
-                             selectedRole === 'Executive' ? 'executive@ngoindia.org' :
-                             selectedRole === 'Employee' ? 'employee@ngoindia.org' : ''} for {selectedRole} login
+                        Use {selectedRole === 'Admin' ? 'admin@ngoindia.org' : 
+                             selectedRole === 'Executive' ? 'executive@ngoindia.org' : 
+                             selectedRole === 'Employee' ? 'employee@ngoindia.org' : 
+                             selectedRole === 'Director' ? 'director@ngoindia.org' : ''} for {selectedRole} login (Password: ngoindia123)
                       </p>
                     )}
                   </div>
@@ -198,7 +197,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors pr-12"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors pr-12 text-gray-900 placeholder-gray-500"
                         placeholder="Enter your password"
                         required
                       />

@@ -87,7 +87,7 @@ export function AdminDashboard() {
     <div className="p-8 max-w-7xl mx-auto">
       {/* Welcome Section */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Welcome Back, Master!</h1>
+        <h1 className="text-3xl font-bold text-gray-900">Welcome Back, Admin!</h1>
         <p className="text-gray-600">Here are your latest insights</p>
       </div>
 
