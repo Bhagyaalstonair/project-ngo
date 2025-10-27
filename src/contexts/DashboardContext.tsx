@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { createContext, useContext, useState, ReactNode } from 'react';
 
 export interface Donation {
   id: string;
@@ -8,6 +8,20 @@ export interface Donation {
   project: string;
   type: 'one-time' | 'recurring';
   status: 'completed' | 'pending' | 'failed';
+  // FCRA / foreign-funds related (optional)
+  isForeign?: boolean;
+  donorCountry?: string;
+  remittanceRef?: string;
+  currency?: string;
+  convertedAmount?: number; // INR equivalent
+  conversionRate?: number;
+  FIRC?: string; // FIRC id / reference
+  attachments?: string[];
+  purposeTag?: string;
+  usageRestriction?: string;
+  createdBy?: string;
+  createdAt?: string;
+  notes?: string;
 }
 
 export interface Project {
@@ -261,7 +275,9 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
       ...donation,
       id: Date.now().toString(),
       project: 'General Fund',
-      status: 'completed'
+      status: 'completed',
+      createdBy: donation.createdBy || 'system',
+      createdAt: new Date().toISOString().split('T')[0]
     };
     setDonations(prev => {
       const updated = [newDonation, ...prev];

@@ -2,8 +2,8 @@ import React from 'react';
 import { 
   Home, Users, DollarSign, FolderOpen, Network, 
   UserCheck, FileText, Settings, LogOut, Bell,
-  ChevronRight, Heart, Shield, Scale,
-  IndianRupee, BookOpen
+  ChevronRight, Heart, Shield,
+  IndianRupee, TrendingUp, Scale
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ActiveModule } from './Dashboard';
@@ -39,6 +39,8 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
   const getMenuItems = () => {
     const baseItems = [
       { id: 'dashboard', label: 'Dashboard', icon: Home, available: true },
+      { id: 'beneficiaryImpact', label: 'Beneficiary Impact Tracking', icon: TrendingUp, available: ['admin', 'executive'].includes(user?.role || '') },
+      { id: 'fcraCompliance', label: 'FCRA Compliance', icon: Scale, available: ['admin', 'finance'].includes(user?.role || '') },
       { id: 'donors', label: 'Donor Management', icon: Users, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'finances', label: 'Financial Tracking', icon: IndianRupee, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'projects', label: 'Project Monitoring', icon: FolderOpen, available: true },
@@ -98,7 +100,7 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
       {/* Navigation */}
       <nav className="flex-1 p-4 overflow-y-auto">
         <div className="space-y-2">
-          {menuItems.map((item) => {
+          {menuItems.map((item: any) => {
             const Icon = item.icon;
             const isActive = activeModule === item.id;
             
