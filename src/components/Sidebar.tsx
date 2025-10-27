@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Home, Users, DollarSign, FolderOpen, Network, 
   UserCheck, FileText, Settings, LogOut, Bell,
-  ChevronRight, Heart, Shield,
+  ChevronRight, Heart, Shield,BookOpen,
   IndianRupee, TrendingUp, Scale
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
