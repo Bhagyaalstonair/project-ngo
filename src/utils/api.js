@@ -139,8 +139,63 @@ class ApiService {
 
   // Donation endpoints
   async getDonations(params = {}) {
-    const queryString = new URLSearchParams(params).toString();
-    return this.request(`/donations/?${queryString}`);
+    try {
+      const queryString = new URLSearchParams(params).toString();
+      return this.request(`/donations/?${queryString}`);
+    } catch (error) {
+      // Fallback to localStorage
+      const donations = JSON.parse(localStorage.getItem('fcra_donations') || '[]');
+      return { results: donations };
+    }
+  }
+
+  async createDonation(data) {
+    try {
+      return this.request('/donations/', {
+        method: 'POST',
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      // Fallback to localStorage
+      const donations = JSON.parse(localStorage.getItem('fcra_donations') || '[]');
+      const newDonation = { ...data, id: Date.now().toString() };
+      donations.push(newDonation);
+      localStorage.setItem('fcra_donations', JSON.stringify(donations));
+      return newDonation;
+    }
+  }
+
+  async updateDonation(id, data) {
+    try {
+      return this.request(`/donations/${id}/`, {
+        method: 'PUT',
+        body: JSON.stringify(data),
+      });
+    } catch (error) {
+      // Fallback to localStorage
+      const donations = JSON.parse(localStorage.getItem('fcra_donations') || '[]');
+      const index = donations.findIndex(d => d.id === id);
+      if (index !== -1) {
+        donations[index] = { ...donations[index], ...data };
+        localStorage.setItem('fcra_donations', JSON.stringify(donations));
+        return donations[index];
+      }
+      throw new Error('Donation not found');
+    }
+  }
+
+  async deleteDonation(id) {
+    try {
+      return this.request(`/donations/${id}/`, {
+        method: 'DELETE',
+      });
+    } catch (error) {
+      // Fallback to localStorage
+      const donations = JSON.parse(localStorage.getItem('fcra_donations') || '[]');
+      const filtered = donations.filter(d => d.id !== id);
+      localStorage.setItem('fcra_donations', JSON.stringify(filtered));
+      return { success: true };
+    }
   }
 
   async processDonation(data) {
