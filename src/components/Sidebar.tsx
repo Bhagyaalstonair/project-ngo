@@ -3,7 +3,7 @@ import {
   Home, Users, DollarSign, FolderOpen, Network, 
   UserCheck, FileText, Settings, LogOut, Bell,
   ChevronRight, Heart, Shield, Scale,
-  IndianRupee
+  IndianRupee, BookOpen
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ActiveModule } from './Dashboard';
