@@ -11,6 +11,8 @@ import { GovernmentHub } from './modules/GovernmentHub';
 import { HRManagement } from './modules/HRManagement';
 import { Settings } from './modules/Settings';
 import { Reports } from './modules/Reports';
+import { ComplianceModule } from './modules/ComplianceModule';
+
 import { useAuth } from '../contexts/AuthContext';
 import RegisterNGO from './modules/RegisterNGO';
 import { KnowledgeHub } from './KnowledgeHub';
@@ -28,6 +30,7 @@ export type ActiveModule =
   | 'hr' 
   | 'reports' 
   | 'settings'
+  | 'compliance'
   | 'register'
   | 'RegisterNGO'
   | 'knowledge';
@@ -92,6 +95,9 @@ export function Dashboard() {
         return <Reports />;
       case 'settings':
         return <Settings />;
+      case 'compliance':
+        return <ComplianceModule />;
+
       case 'register':
       case 'RegisterNGO':
         return <RegisterNGO />;

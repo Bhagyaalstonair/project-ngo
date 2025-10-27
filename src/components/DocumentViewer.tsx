@@ -171,7 +171,7 @@ export function DocumentViewer({ documentId, onBack }: DocumentViewerProps): JSX
                 <div>
                   <h3 className="font-semibold text-gray-900 mb-2">Tags</h3>
                   <div className="flex flex-wrap gap-2">
-                    {doc.tags.map((tag, index) => (
+                    {doc.tags.map((tag: string, index: number) => (
                       <span key={index} className="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded-full">
                         {tag}
                       </span>
