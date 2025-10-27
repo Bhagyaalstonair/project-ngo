@@ -11,8 +11,8 @@ import { GovernmentHub } from './modules/GovernmentHub';
 import { HRManagement } from './modules/HRManagement';
 import { Settings } from './modules/Settings';
 import { Reports } from './modules/Reports';
-import { ComplianceModule } from './modules/ComplianceModule';
-
+import { BeneficiaryImpactTracking } from './modules/BeneficiaryImpactTracking';
+import { FcraCompliance } from './modules/FcraCompliance';
 import { useAuth } from '../contexts/AuthContext';
 import RegisterNGO from './modules/RegisterNGO';
 import { KnowledgeHub } from './KnowledgeHub';
@@ -26,6 +26,8 @@ export type ActiveModule =
   | 'donors' 
   | 'finances' 
   | 'projects' 
+  | 'beneficiaryImpact'
+  | 'fcraCompliance'
   | 'collaboration' 
   | 'government'
   | 'hr' 
@@ -87,6 +89,10 @@ export function Dashboard() {
         return <FinancialTracking />;
       case 'projects':
         return <ProjectMonitoring />;
+      case 'beneficiaryImpact':
+        return <BeneficiaryImpactTracking />;
+      case 'fcraCompliance':
+        return <FcraCompliance />;
       case 'collaboration':
         return <CollaborationHub />;
       case 'government':
