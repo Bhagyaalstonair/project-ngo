@@ -7,14 +7,12 @@ import {
 } from 'lucide-react';
 import { LoginModal } from './LoginModal';
 import { SignUpModal } from './SignUpModal';
-import { DonationPage } from './DonationPage';
 import { motion } from 'framer-motion';
 import { getCategoryImage } from '../utils/categoryImages';
 
 export function LandingPage() {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
-  const [showDonationPage, setShowDonationPage] = useState(false);
 
   // Centralized image configuration
   const IMAGES = {
