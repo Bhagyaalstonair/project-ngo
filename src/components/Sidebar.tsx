@@ -64,8 +64,8 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
     <div className="w-64 bg-white border-r border-gray-200 flex flex-col">
       {/* Header */}
       <div className="p-6 border-b border-gray-200">
-        <div className="flex items-start gap-3">
-          <img src="/ngo india logo.png" alt="NGO INDIA Logo" className="w-60 h-30 rounded-lg" />
+        <div className="flex items-center justify-center gap-3">
+          <img src="/ngo india logo.png" alt="NGO INDIA Logo" className="w-40 h-20 rounded-lg" />
         </div>
       </div>
 
