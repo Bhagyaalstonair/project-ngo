@@ -16,6 +16,7 @@ import { FcraCompliance } from './modules/FcraCompliance';
 import { useAuth } from '../contexts/AuthContext';
 import RegisterNGO from './modules/RegisterNGO';
 import { KnowledgeHub } from './KnowledgeHub';
+import { MOUTemplates } from './modules/MOUTemplates';
 
 
  
@@ -32,9 +33,11 @@ export type ActiveModule =
   | 'hr' 
   | 'reports' 
   | 'settings'
+  | 'compliance'
   | 'register'
   | 'RegisterNGO'
-  | 'knowledge';
+  | 'knowledge'
+  | 'mou-templates';
 
 export function Dashboard() {
   const { user } = useAuth();
@@ -100,11 +103,16 @@ export function Dashboard() {
         return <Reports />;
       case 'settings':
         return <Settings />;
+      case 'compliance':
+        return <ComplianceModule />;
+
       case 'register':
       case 'RegisterNGO':
         return <RegisterNGO />;
       case 'knowledge':
         return <KnowledgeHub />;
+      case 'mou-templates':
+        return <MOUTemplates />;
       default:
         return <div className="p-8 text-center text-gray-500">Module under development</div>;
     }

@@ -1,22 +1,22 @@
 import React, { useState } from 'react';
-import { 
-  X, ChevronRight, ArrowLeft, AlertCircle, Eye, EyeOff 
+import {
+  X, ChevronRight, ArrowLeft, AlertCircle, Eye, EyeOff
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { Captcha } from './Captcha';
 import { motion, AnimatePresence } from 'framer-motion';
-
+ 
 interface LoginModalProps {
   onClose: () => void;
 }
-
+ 
 const roles = [
-  { name: 'Director', color: 'from-orange-500 to-orange-600', dashboard: '/director-dashboard' },
+  { name: 'Director', color: 'from-orange-500 to-orange-600', dashboard: '/' },
   { name: 'Executive', color: 'from-orange-400 to-orange-500', dashboard: '/executive-dashboard' },
   { name: 'Employee', color: 'from-orange-300 to-orange-400', dashboard: '/employee-dashboard' },
   { name: 'Admin', color: 'from-orange-600 to-orange-700', dashboard: '/admin-dashboard' },
 ];
-
+ 
 export function LoginModal({ onClose }: LoginModalProps) {
   const [step, setStep] = useState<'select' | 'login'>('select');
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
@@ -26,40 +26,47 @@ export function LoginModal({ onClose }: LoginModalProps) {
   const [error, setError] = useState('');
   const [captchaValid, setCaptchaValid] = useState(false);
   const { login, isLoading } = useAuth();
-
+ 
   const handleRoleSelect = (role: string) => {
     setSelectedRole(role);
     setStep('login');
   };
-
+ 
   const handleBack = () => {
     setStep('select');
     setSelectedRole(null);
     setError('');
   };
-
+ 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
-
+ 
     if (!captchaValid) {
       setError('Please complete the captcha verification.');
       return;
     }
-
+ 
     if (!selectedRole) {
       setError('Please select a role first.');
       return;
     }
 
-    const success = await login(email.trim(), password, selectedRole);
+    const success = await login(email.trim(), password, selectedRole.toLowerCase());
     if (!success) {
-      setError(`Invalid credentials for ${selectedRole} role. Please check your email and try again.`);
+      setError(`Invalid credentials for ${selectedRole} role. Please check your email and password.`);
     } else {
-      window.location.href = roles.find(r => r.name === selectedRole)?.dashboard || '/';
+      // Close modal and redirect to dashboard
+      onClose();
+      if (selectedRole === 'Director') {
+        // Director stays on main page for now
+        window.location.href = '/';
+      } else {
+        window.location.href = roles.find(r => r.name === selectedRole)?.dashboard || '/';
+      }
     }
   };
-
+ 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <motion.div
@@ -68,16 +75,10 @@ export function LoginModal({ onClose }: LoginModalProps) {
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.3 }}
         className="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative overflow-hidden max-h-[90vh] overflow-y-auto"
+        className="bg-white rounded-2xl shadow-2xl w-full max-w-lg relative overflow-hidden max-h-[90vh] overflow-y-auto scrollbar-hide"
         style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'transparent transparent',
-          transition: 'scrollbar-color 0.3s ease'
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.scrollbarColor = '#9ca3af #e5e7eb';
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.scrollbarColor = 'transparent transparent';
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}
       >
         {/* Close Button */}
@@ -87,7 +88,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
         >
           <X className="w-6 h-6" />
         </button>
-
+ 
         {/* Header */}
         <div className="text-center p-6 border-b border-gray-100">
           <img
@@ -98,7 +99,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
           <h2 className="text-2xl font-bold text-gray-900">NGO INDIA Portal</h2>
           <p className="text-gray-600 text-sm">Empowering NGOs through digital innovation</p>
         </div>
-
+ 
         <div className="p-8">
           <AnimatePresence mode="wait">
             {step === 'select' ? (
@@ -113,7 +114,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
                 <h3 className="text-lg font-semibold text-gray-800 text-center mb-6">
                   Select your Login Type
                 </h3>
-
+ 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {roles.map((role) => (
                     <button
@@ -126,13 +127,13 @@ export function LoginModal({ onClose }: LoginModalProps) {
                     </button>
                   ))}
                 </div>
-
+ 
                 <p className="text-center text-sm text-gray-500 mt-6">
                   Choose your respective role to continue login.
                 </p>
               </motion.div>
             ) : (
-              // 🧡 Login Form Screen
+              
               <motion.div
                 key="login-form"
                 initial={{ opacity: 0, y: 20 }}
@@ -151,7 +152,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
                     {selectedRole} Login
                   </span>
                 </div>
-
+ 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div>
                     <label
@@ -165,10 +166,11 @@ export function LoginModal({ onClose }: LoginModalProps) {
                       id="email"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors"
+                      className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors text-gray-900 placeholder-gray-500"
                       placeholder={selectedRole === 'Admin' ? 'admin@ngoindia.org' : 
                                  selectedRole === 'Executive' ? 'executive@ngoindia.org' : 
                                  selectedRole === 'Employee' ? 'employee@ngoindia.org' : 
+                                 selectedRole === 'Director' ? 'director@ngoindia.org' :
                                  'Enter your email'}
                       required
                     />
@@ -176,11 +178,12 @@ export function LoginModal({ onClose }: LoginModalProps) {
                       <p className="text-xs text-gray-500 mt-1">
                         Use {selectedRole === 'Admin' ? 'admin@ngoindia.org' : 
                              selectedRole === 'Executive' ? 'executive@ngoindia.org' : 
-                             selectedRole === 'Employee' ? 'employee@ngoindia.org' : ''} for {selectedRole} login
+                             selectedRole === 'Employee' ? 'employee@ngoindia.org' : 
+                             selectedRole === 'Director' ? 'director@ngoindia.org' : ''} for {selectedRole} login (Password: ngoindia123)
                       </p>
                     )}
                   </div>
-
+ 
                   <div>
                     <label
                       htmlFor="password"
@@ -194,7 +197,7 @@ export function LoginModal({ onClose }: LoginModalProps) {
                         id="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors pr-12"
+                        className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:ring-2 focus:ring-orange-500 focus:border-transparent transition-colors pr-12 text-gray-900 placeholder-gray-500"
                         placeholder="Enter your password"
                         required
                       />
@@ -211,16 +214,16 @@ export function LoginModal({ onClose }: LoginModalProps) {
                       </button>
                     </div>
                   </div>
-
+ 
                   <Captcha onVerify={setCaptchaValid} />
-
+ 
                   {error && (
                     <div className="flex items-center gap-2 text-red-600 text-sm bg-red-50 p-3 rounded-lg">
                       <AlertCircle className="w-4 h-4" />
                       {error}
                     </div>
                   )}
-
+ 
                   <button
                     type="submit"
                     disabled={isLoading || !captchaValid}
