@@ -7,26 +7,27 @@ export function LoginForm() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const [selectedRole, setSelectedRole] = useState<'admin' | 'executive' | 'employee'>('admin');
+  const [selectedRole, setSelectedRole] = useState<'admin' | 'executive' | 'employee' | 'director'>('admin');
   const { login, isLoading } = useAuth();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     
-    const success = await login(email, password, selectedRole);
+    const success = await login(email.trim(), password, selectedRole);
     if (!success) {
-      setError('Invalid email or password. Please try again.');
+      setError('Invalid email, password, or role combination. Please check your credentials.');
     }
   };
 
   const demoAccounts = [
     { role: 'admin', email: 'admin@ngoindia.org', name: 'NGO India - Administrator' },
     { role: 'executive', email: 'executive@ngoindia.org', name: 'NGO India - Executive Director' },
-    { role: 'employee', email: 'employee@ngoindia.org', name: 'NGO India - Employee' }
+    { role: 'employee', email: 'employee@ngoindia.org', name: 'NGO India - Employee' },
+    { role: 'director', email: 'director@ngoindia.org', name: 'NGO India - Director' }
   ];
 
-  const handleDemoLogin = (demoEmail: string, demoPassword: string = 'demo123') => {
+  const handleDemoLogin = (demoEmail: string, demoPassword: string = 'ngoindia123') => {
     setEmail(demoEmail);
     setPassword(demoPassword);
   };
@@ -120,6 +121,7 @@ export function LoginForm() {
                     <div>
                       <div className="font-medium text-gray-900">{account.name}</div>
                       <div className="text-sm text-gray-500">{account.email}</div>
+                      <div className="text-xs text-gray-400">Password: ngoindia123</div>
                     </div>
                   </div>
                 </button>

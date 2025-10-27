@@ -65,7 +65,7 @@ export default function RegisteredNGOPage() {
   };
 
   return (
-    <div className="p-8 min-h-screen bg-gradient-to-br from-orange-50 to-white">
+    <div className="p-8 min-h-screen bg-gray-50">
       {/* Header */}
       <div className="mb-8">
         <div className="flex items-center justify-between">
