@@ -5,6 +5,7 @@ import {
   Globe, Handshake, Target, BarChart3,
   Mail, Phone, MapPin, Facebook, Twitter, Instagram
 } from 'lucide-react';
+
 import { LoginModal } from './LoginModal';
 import { SignUpModal } from './SignUpModal';
 import { motion } from 'framer-motion';
@@ -116,6 +117,7 @@ export function LandingPage() {
               <a href="#projects" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Projects</a>
               <a href="/campaigns" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Campaigns</a>
               <a href="#membership" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Membership</a>
+              <a href="#sector-networks" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Networks</a>
               <a href="#impact" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Impact</a>
               <a href="#contact" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Contact</a>
             </nav>
@@ -154,7 +156,10 @@ export function LandingPage() {
                 Donate Now
               </motion.button>
               <button 
-                onClick={() => window.location.href = '/join'}
+                onClick={() => {
+                  window.history.pushState({}, '', '/join');
+                  window.dispatchEvent(new PopStateEvent('popstate'));
+                }}
                 className="border border-orange-500 text-orange-600 px-4 py-2 rounded-lg hover:bg-orange-50 transition-colors font-medium w-full md:w-auto"
               >
                 Join Us

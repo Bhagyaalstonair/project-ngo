@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Home, Users, DollarSign, FolderOpen, Network, 
   UserCheck, FileText, Settings, LogOut, Bell,
-  ChevronRight, Heart, Shield,BookOpen,
+  ChevronRight, Heart, Shield, BookOpen,
   IndianRupee, TrendingUp, Scale
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
@@ -51,6 +51,7 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
       { id: 'hr', label: 'HR Management', icon: UserCheck, available: user?.role === 'executive' },
       { id: 'reports', label: 'Reports', icon: FileText, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'mou-templates', label: 'MOU Templates', icon: BookOpen, available: true },
+      { id: 'sector-networks', label: 'Sector Networks', icon: Network, available: true },
       { id: 'RegisterNGO', label: 'Register NGO', icon: Users, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'settings', label: 'Settings', icon: Settings, available: true },
     ];

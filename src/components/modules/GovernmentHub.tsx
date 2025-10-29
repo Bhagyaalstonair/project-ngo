@@ -415,68 +415,7 @@ export function GovernmentHub() {
     </div>
   );
 
-  const renderDocumentsTab = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-xl font-semibold text-gray-900">Digital Vault</h3>
-        <button 
-          onClick={() => setShowUploadModal(true)}
-          className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors"
-        >
-          Upload Document
-        </button>
-      </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {documents.map((doc, index) => (
-          <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-            <div className="flex items-start gap-3 mb-4">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <FileText className="w-5 h-5 text-orange-600" />
-              </div>
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900 mb-1">{doc.name}</h4>
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <span>{doc.type}</span>
-                  <span>•</span>
-                  <span>{doc.size}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex items-center justify-between mb-4">
-              <span className="text-sm text-gray-600">Uploaded: {doc.date}</span>
-              <span className={`px-2 py-1 text-xs rounded-full ${
-                doc.shared ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-              }`}>
-                {doc.shared ? 'Shared' : 'Private'}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button 
-                onClick={() => alert(`Document Preview:\n\nName: ${doc.name}\nType: ${doc.type}\nSize: ${doc.size}\nUploaded: ${doc.date}\nStatus: ${doc.shared ? 'Shared with government' : 'Private'}`)}
-                className="px-3 py-1 text-sm text-orange-600 hover:text-orange-700 transition-colors"
-              >
-                View
-              </button>
-              <button 
-                onClick={() => {
-                  const link = document.createElement('a');
-                  link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(`Document: ${doc.name}\nType: ${doc.type}\nSize: ${doc.size}\nUploaded: ${doc.date}`);
-                  link.download = doc.name.toLowerCase().replace(/\s+/g, '-') + '.txt';
-                  link.click();
-                }}
-                className="px-3 py-1 text-sm bg-orange-500 text-white rounded hover:bg-orange-600 transition-colors"
-              >
-                Download
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 
   const renderNotificationsTab = () => (
     <div className="space-y-6">
@@ -671,7 +610,7 @@ export function GovernmentHub() {
               { id: 'verification', label: 'NGO Verification', icon: Shield },
               { id: 'schemes', label: 'Government Schemes', icon: FileText },
               { id: 'applications', label: 'Applications', icon: Send },
-              { id: 'documents', label: 'Digital Vault', icon: FolderOpen },
+  
               { id: 'notifications', label: 'Notifications', icon: Bell },
               { id: 'support', label: 'Support & FAQ', icon: HelpCircle },
             ].map((tab) => {
@@ -698,7 +637,7 @@ export function GovernmentHub() {
           {activeTab === 'verification' && renderVerificationTab()}
           {activeTab === 'schemes' && renderSchemesTab()}
           {activeTab === 'applications' && renderApplicationsTab()}
-          {activeTab === 'documents' && renderDocumentsTab()}
+
           {activeTab === 'notifications' && renderNotificationsTab()}
           {activeTab === 'support' && renderSupportTab()}
         </div>
