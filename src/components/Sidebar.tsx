@@ -2,8 +2,8 @@ import React from 'react';
 import { 
   Home, Users, DollarSign, FolderOpen, Network, 
   UserCheck, FileText, Settings, LogOut, Bell,
-  ChevronRight, Heart, Shield,BookOpen,
-  IndianRupee, TrendingUp, Scale
+  ChevronRight, Heart, Shield, BookOpen,
+  IndianRupee, TrendingUp, Scale, FileCheck
 } from 'lucide-react';
 import { useAuth } from '../contexts/AuthContext';
 import { ActiveModule } from './Dashboard';
@@ -45,9 +45,10 @@ export function Sidebar({ activeModule, setActiveModule }: SidebarProps) {
       { id: 'finances', label: 'Financial Tracking', icon: IndianRupee, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'projects', label: 'Project Monitoring', icon: FolderOpen, available: true },
       { id: 'collaboration', label: 'Collaboration Hub', icon: Network, available: true },
+      { id: 'partner-network', label: 'Partner Network', icon: Users, available: true },
       { id: 'government', label: 'Government Hub', icon: Shield, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'compliance', label: 'Compliance & Legal', icon: Scale, available: ['admin', 'executive'].includes(user?.role || '') },
-
+      { id: 'grant-applications', label: 'Grant Applications', icon: FileCheck, available: true },
       { id: 'hr', label: 'HR Management', icon: UserCheck, available: user?.role === 'executive' },
       { id: 'reports', label: 'Reports', icon: FileText, available: ['admin', 'executive'].includes(user?.role || '') },
       { id: 'mou-templates', label: 'MOU Templates', icon: BookOpen, available: true },

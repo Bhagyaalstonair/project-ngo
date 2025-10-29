@@ -18,6 +18,8 @@ import { useAuth } from '../contexts/AuthContext';
 import RegisterNGO from './modules/RegisterNGO';
 import { KnowledgeHub } from './KnowledgeHub';
 import { MOUTemplates } from './modules/MOUTemplates';
+import { PartnerNetwork } from './modules/PartnerNetwork';
+import { GrantApplicationPage } from '../pages/GrantApplicationPage';
 
 
  
@@ -38,7 +40,9 @@ export type ActiveModule =
   | 'register'
   | 'RegisterNGO'
   | 'knowledge'
-  | 'mou-templates';
+  | 'mou-templates'
+  | 'partner-network'
+  | 'grant-applications';
 
 export function Dashboard() {
   const { user } = useAuth();
@@ -114,6 +118,10 @@ export function Dashboard() {
         return <KnowledgeHub />;
       case 'mou-templates':
         return <MOUTemplates />;
+      case 'partner-network':
+        return <PartnerNetwork />;
+      case 'grant-applications':
+        return <GrantApplicationPage />;
       default:
         return <div className="p-8 text-center text-gray-500">Module under development</div>;
     }

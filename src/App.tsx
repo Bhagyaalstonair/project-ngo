@@ -32,6 +32,7 @@ import { PartnerOrganizationsPage } from './components/pages/PartnerOrganization
 import { MembershipPage } from './components/pages/MembershipPage';
 import { MembershipDashboard } from './components/pages/MembershipDashboard';
 import { JoinMembershipPage } from './components/pages/JoinMembershipPage';
+import { PartnerNetworkPage } from './pages/PartnerNetworkPage';
 
 import { AddEmployee } from './components/pages/AddEmployee';
 import StaffProfile from './components/pages/StaffProfile';
@@ -182,6 +183,9 @@ if (currentPage === '/staff-profile') {
 }
 if (currentPage === '/performance-review-details') {
   return <PerformanceReviewDetails />;
+}
+if (currentPage === '/partner-network') {
+  return <PartnerNetworkPage />;
 }
 
 

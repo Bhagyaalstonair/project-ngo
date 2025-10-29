@@ -4,10 +4,14 @@ const cors = require("cors");
 const { Server } = require("socket.io");
 const multer = require("multer");
 const path = require("path");
+const grantApplicationsRouter = require('./grantApplications');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+// API Routes
+app.use('/api/grant-applications', grantApplicationsRouter);
 const server = http.createServer(app);
 
 const io = new Server(server, {
