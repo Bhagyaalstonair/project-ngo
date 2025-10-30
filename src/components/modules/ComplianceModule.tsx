@@ -5,7 +5,7 @@ import {
   TrendingUp, BarChart3, Clock, Award, X, MapPin,
   Phone, Mail, Building, PieChart, Activity, Target,
   Brain, Zap, AlertCircle, Search, FileCheck, Scale,
-  Gavel, BookOpen, AlertOctagon, Plus
+  Gavel, BookOpen, AlertOctagon, Plus, FolderOpen
 } from 'lucide-react';
 
 interface Donation {
@@ -34,13 +34,7 @@ interface Donation {
   }[];
 }
 
-interface ComplianceDoc {
-  id: string;
-  name: string;
-  type: string;
-  expiryDate: string;
-  status: 'valid' | 'expiring' | 'expired';
-}
+
 
 interface AIValidation {
   id: string;
@@ -61,7 +55,7 @@ interface AIValidation {
 interface Policy {
   id: string;
   title: string;
-  category: 'HR' | 'Finance' | 'Legal' | 'Volunteer' | 'Operations' | 'Safety';
+  category: 'HR' | 'Finance' | 'Legal' | 'Volunteer' | 'Operations' | 'Safety' | 'Others';
   version: string;
   status: 'draft' | 'review' | 'approved' | 'published' | 'expired';
   visibility: 'internal' | 'public';
@@ -92,7 +86,7 @@ interface LegalRequirement {
 export function ComplianceModule() {
   const [activeTab, setActiveTab] = useState('tracking');
   const [selectedDonation, setSelectedDonation] = useState<Donation | null>(null);
-  const [selectedDoc, setSelectedDoc] = useState<ComplianceDoc | null>(null);
+
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [hoveredSegment, setHoveredSegment] = useState<any>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -472,10 +466,18 @@ export function ComplianceModule() {
     }
   ]);
 
-  const [complianceDocs, setComplianceDocs] = useState<ComplianceDoc[]>([
-    { id: '1', name: '12A Registration', type: 'Tax Exemption', expiryDate: '2025-03-15', status: 'valid' },
-    { id: '2', name: '80G Certificate', type: 'Donation Receipt', expiryDate: '2024-12-31', status: 'expiring' },
-    { id: '3', name: 'FCRA License', type: 'Foreign Contribution', expiryDate: '2024-06-30', status: 'expired' }
+  // Digital Vault documents from Government Hub
+  const [digitalVaultDocs] = useState([
+    { name: 'Registration Certificate', type: 'PDF', size: '2.4 MB', date: '2024-12-01', shared: true },
+    { name: 'Audited Financial Report 2024', type: 'PDF', size: '5.2 MB', date: '2024-11-15', shared: false },
+    { name: 'Project Proposal - Healthcare', type: 'DOCX', size: '1.8 MB', date: '2024-12-10', shared: true },
+    { name: 'Impact Assessment Report', type: 'PDF', size: '3.1 MB', date: '2024-12-05', shared: false },
+    { name: 'Budget Utilization Report', type: 'XLSX', size: '890 KB', date: '2024-11-28', shared: true },
+    { name: 'Compliance Certificate', type: 'PDF', size: '1.2 MB', date: '2024-12-12', shared: true },
+    { name: '12A Registration', type: 'PDF', size: '1.5 MB', date: '2024-01-15', shared: true },
+    { name: '80G Certificate', type: 'PDF', size: '1.1 MB', date: '2024-01-20', shared: true },
+    { name: 'FCRA License', type: 'PDF', size: '2.0 MB', date: '2024-02-01', shared: false },
+    { name: 'PAN Card', type: 'PDF', size: '500 KB', date: '2024-01-10', shared: true }
   ]);
 
   const [legalRequirements] = useState<LegalRequirement[]>([
@@ -654,7 +656,7 @@ export function ComplianceModule() {
     { id: 'ai-validation', label: 'AI Validation', icon: Brain },
     { id: 'policy-management', label: 'Policy Management', icon: FileCheck },
     { id: 'laws-regulations', label: 'Laws & Regulations', icon: Scale },
-    { id: 'compliance', label: 'Compliance Docs', icon: FileText },
+    { id: 'digital-vault', label: 'Digital Vault', icon: FolderOpen },
     { id: 'reports', label: 'Reports & Audits', icon: Shield }
   ];
 
@@ -662,9 +664,7 @@ export function ComplianceModule() {
     setSelectedDonation(donation);
   };
 
-  const handleViewDoc = (doc: ComplianceDoc) => {
-    setSelectedDoc(doc);
-  };
+
 
   const generateReportContent = (reportName: string) => {
     const date = new Date().toLocaleDateString('en-IN');
@@ -1408,10 +1408,10 @@ Phone: +91 98765 43210`;
     setViewingDocument({ fileName, content });
   };
 
-  const [complianceUploadData, setComplianceUploadData] = useState({
+  const [vaultUploadData, setVaultUploadData] = useState({
     name: '',
-    type: 'Tax Exemption',
-    expiryDate: '',
+    type: 'PDF',
+    description: '',
     file: null as File | null
   });
 
@@ -1428,24 +1428,15 @@ Phone: +91 98765 43210`;
     setShowUploadModal(true);
   };
 
-  const handleComplianceUpload = () => {
-    if (!complianceUploadData.name || !complianceUploadData.expiryDate || !complianceUploadData.file) {
+  const handleVaultUpload = () => {
+    if (!vaultUploadData.name || !vaultUploadData.file) {
       alert('Please fill all fields and select a file');
       return;
     }
 
-    const newDoc: ComplianceDoc = {
-      id: (complianceDocs.length + 1).toString(),
-      name: complianceUploadData.name,
-      type: complianceUploadData.type,
-      expiryDate: complianceUploadData.expiryDate,
-      status: new Date(complianceUploadData.expiryDate) > new Date() ? 'valid' : 'expired'
-    };
-
-    setComplianceDocs(prev => [...prev, newDoc]);
-    setComplianceUploadData({ name: '', type: 'Tax Exemption', expiryDate: '', file: null });
+    alert(`Document uploaded successfully!`);
+    setVaultUploadData({ name: '', type: 'PDF', description: '', file: null });
     setShowUploadModal(false);
-    alert('Document uploaded successfully!');
   };
 
   const extractFileContent = async (file: File): Promise<string> => {
@@ -2073,70 +2064,7 @@ For detailed content, please contact the administration.`;
     );
   };
 
-  const DocumentModal = () => {
-    if (!selectedDoc) return null;
-    
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-        <div className="bg-white rounded-lg shadow-xl w-full max-w-lg">
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Document Details</h3>
-            <button onClick={() => setSelectedDoc(null)} className="text-gray-400 hover:text-gray-600">
-              <X className="w-6 h-6" />
-            </button>
-          </div>
-          
-          <div className="p-6 space-y-4">
-            <div className="flex items-center gap-4">
-              <FileText className="w-12 h-12 text-orange-500" />
-              <div>
-                <h4 className="font-semibold text-gray-900">{selectedDoc.name}</h4>
-                <p className="text-gray-600">{selectedDoc.type}</p>
-              </div>
-            </div>
-            
-            <div className="bg-gray-50 p-4 rounded-lg space-y-3">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Document Type:</span>
-                <span className="font-medium text-gray-900">{selectedDoc.type}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Expiry Date:</span>
-                <span className="font-medium text-gray-900">{selectedDoc.expiryDate}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Status:</span>
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  selectedDoc.status === 'valid' ? 'bg-green-100 text-green-800' :
-                  selectedDoc.status === 'expiring' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-red-100 text-red-800'
-                }`}>
-                  {selectedDoc.status}
-                </span>
-              </div>
-            </div>
-            
-            <div className="flex gap-3">
-              <button 
-                onClick={() => alert(`Viewing ${selectedDoc.name}`)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
-              >
-                <Eye className="w-4 h-4" />
-                View Document
-              </button>
-              <button 
-                onClick={() => handleDownload(`${selectedDoc.name}.pdf`)}
-                className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600"
-              >
-                <Download className="w-4 h-4" />
-                Download
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  };
+
 
   const UploadModal = () => {
     if (!showUploadModal) return null;
@@ -2145,7 +2073,7 @@ For detailed content, please contact the administration.`;
       <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-lg shadow-xl w-full max-w-md">
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
-            <h3 className="text-lg font-semibold text-gray-900">Upload Compliance Document</h3>
+            <h3 className="text-lg font-semibold text-gray-900">Upload Document</h3>
             <button onClick={() => setShowUploadModal(false)} className="text-gray-400 hover:text-gray-600">
               <X className="w-6 h-6" />
             </button>
@@ -2156,36 +2084,10 @@ For detailed content, please contact the administration.`;
               <label className="block text-sm font-medium text-gray-700 mb-2">Document Name</label>
               <input 
                 type="text" 
-                value={complianceUploadData.name}
-                onChange={(e) => setComplianceUploadData(prev => ({ ...prev, name: e.target.value }))}
+                value={vaultUploadData.name}
+                onChange={(e) => setVaultUploadData(prev => ({ ...prev, name: e.target.value }))}
                 className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
                 placeholder="Enter document name"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Document Type</label>
-              <select 
-                value={complianceUploadData.type}
-                onChange={(e) => setComplianceUploadData(prev => ({ ...prev, type: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              >
-                <option value="Tax Exemption">Tax Exemption</option>
-                <option value="Donation Receipt">Donation Receipt</option>
-                <option value="Foreign Contribution">Foreign Contribution</option>
-                <option value="Audit Report">Audit Report</option>
-                <option value="Registration Certificate">Registration Certificate</option>
-                <option value="Other">Other</option>
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Expiry Date</label>
-              <input 
-                type="date" 
-                value={complianceUploadData.expiryDate}
-                onChange={(e) => setComplianceUploadData(prev => ({ ...prev, expiryDate: e.target.value }))}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
               />
             </div>
             
@@ -2194,7 +2096,7 @@ For detailed content, please contact the administration.`;
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-orange-400 transition-colors">
                 <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
                 <p className="text-sm text-gray-600 mb-2">
-                  {complianceUploadData.file ? complianceUploadData.file.name : 'Click to upload or drag and drop'}
+                  {vaultUploadData.file ? vaultUploadData.file.name : 'Click to upload or drag and drop'}
                 </p>
                 <p className="text-xs text-gray-500">PDF, DOC, DOCX up to 10MB</p>
                 <input 
@@ -2204,14 +2106,14 @@ For detailed content, please contact the administration.`;
                   onChange={(e) => {
                     const file = e.target.files?.[0];
                     if (file) {
-                      setComplianceUploadData(prev => ({ ...prev, file }));
+                      setVaultUploadData(prev => ({ ...prev, file }));
                     }
                   }}
-                  id="compliance-file-upload"
+                  id="vault-file-upload"
                 />
                 <button 
                   type="button"
-                  onClick={() => document.getElementById('compliance-file-upload')?.click()}
+                  onClick={() => document.getElementById('vault-file-upload')?.click()}
                   className="mt-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
                 >
                   Choose File
@@ -2223,14 +2125,14 @@ For detailed content, please contact the administration.`;
               <button 
                 onClick={() => {
                   setShowUploadModal(false);
-                  setComplianceUploadData({ name: '', type: 'Tax Exemption', expiryDate: '', file: null });
+                  setVaultUploadData({ name: '', type: 'PDF', description: '', file: null });
                 }}
                 className="flex-1 px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50"
               >
                 Cancel
               </button>
               <button 
-                onClick={handleComplianceUpload}
+                onClick={handleVaultUpload}
                 className="flex-1 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
               >
                 Upload
@@ -2307,28 +2209,38 @@ For detailed content, please contact the administration.`;
         </div>
 
         <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">Compliance Status</h3>
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">Digital Vault Status</h3>
           <div className="space-y-3">
-            {complianceDocs.map((doc) => (
-              <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                <div>
-                  <p className="font-medium text-gray-900">{doc.name}</p>
-                  <p className="text-sm text-gray-600">{doc.type}</p>
-                </div>
-                <div className="flex items-center gap-2">
-                  {doc.status === 'valid' && <CheckCircle className="w-5 h-5 text-green-500" />}
-                  {doc.status === 'expiring' && <Clock className="w-5 h-5 text-yellow-500" />}
-                  {doc.status === 'expired' && <AlertTriangle className="w-5 h-5 text-red-500" />}
-                  <span className={`text-xs px-2 py-1 rounded-full ${
-                    doc.status === 'valid' ? 'bg-green-100 text-green-800' :
-                    doc.status === 'expiring' ? 'bg-yellow-100 text-yellow-800' :
-                    'bg-red-100 text-red-800'
-                  }`}>
-                    {doc.status}
-                  </span>
-                </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">Total Documents</p>
+                <p className="text-sm text-gray-600">Stored in vault</p>
               </div>
-            ))}
+              <div className="flex items-center gap-2">
+                <FolderOpen className="w-5 h-5 text-blue-500" />
+                <span className="text-lg font-bold text-blue-600">{digitalVaultDocs.length}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">Shared with Government</p>
+                <p className="text-sm text-gray-600">Available to authorities</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <span className="text-lg font-bold text-green-600">{digitalVaultDocs.filter(doc => doc.shared).length}</span>
+              </div>
+            </div>
+            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+              <div>
+                <p className="font-medium text-gray-900">Private Documents</p>
+                <p className="text-sm text-gray-600">Internal use only</p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Shield className="w-5 h-5 text-gray-500" />
+                <span className="text-lg font-bold text-gray-600">{digitalVaultDocs.filter(doc => !doc.shared).length}</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2753,46 +2665,89 @@ For detailed content, please contact the administration.`;
     );
   };
 
-  const renderCompliance = () => (
+  const renderDigitalVault = () => (
     <div className="space-y-6">
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900">Compliance Documents</h3>
-          <button onClick={handleUpload} className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl p-6">
+        <div className="flex items-center gap-3 mb-3">
+          <FolderOpen className="w-8 h-8 text-blue-600" />
+          <div>
+            <h2 className="text-xl font-bold text-gray-900">Digital Vault</h2>
+            <p className="text-gray-600">Secure document storage and government integration</p>
+          </div>
+        </div>
+        <div className="bg-white/60 rounded-lg p-4 mt-4">
+          <p className="text-sm text-gray-700">
+            <strong>Purpose:</strong> Centralized document repository for compliance documents, 
+            certificates, and reports with secure sharing capabilities for government authorities.
+          </p>
+        </div>
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <div className="flex items-center justify-between mb-6">
+          <h3 className="text-lg font-semibold text-gray-900">Document Repository</h3>
+          <button 
+            onClick={() => setShowUploadModal(true)}
+            className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+          >
             <Upload className="w-4 h-4" />
             Upload Document
           </button>
         </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {complianceDocs.map((doc) => (
-            <div key={doc.id} className="border border-gray-200 rounded-lg p-4">
-              <div className="flex items-center justify-between mb-2">
-                <FileText className="w-8 h-8 text-orange-500" />
-                <span className={`px-2 py-1 rounded-full text-xs ${
-                  doc.status === 'valid' ? 'bg-green-100 text-green-800' :
-                  doc.status === 'expiring' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-red-100 text-red-800'
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {digitalVaultDocs.map((doc, index) => (
+            <div key={index} className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+              <div className="flex items-start gap-3 mb-4">
+                <div className="p-2 bg-orange-100 rounded-lg">
+                  <FileText className="w-5 h-5 text-orange-600" />
+                </div>
+                <div className="flex-1">
+                  <h4 className="font-semibold text-gray-900 mb-1">{doc.name}</h4>
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <span>{doc.type}</span>
+                    <span>•</span>
+                    <span>{doc.size}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between mb-4">
+                <span className="text-sm text-gray-600">Uploaded: {doc.date}</span>
+                <span className={`px-2 py-1 text-xs rounded-full ${
+                  doc.shared ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
                 }`}>
-                  {doc.status}
+                  {doc.shared ? 'Shared with Gov' : 'Private'}
                 </span>
               </div>
-              <h4 className="font-medium text-gray-900 mb-1">{doc.name}</h4>
-              <p className="text-sm text-gray-600 mb-2">{doc.type}</p>
-              <p className="text-xs text-gray-500 mb-3">Expires: {doc.expiryDate}</p>
-              <div className="flex gap-2">
-                <button onClick={() => handleViewDoc(doc)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200">
-                  <Eye className="w-4 h-4" />
+
+              <div className="flex items-center gap-2">
+                <button 
+                  onClick={() => alert(`Document Preview:\n\nName: ${doc.name}\nType: ${doc.type}\nSize: ${doc.size}\nUploaded: ${doc.date}\nStatus: ${doc.shared ? 'Shared with government authorities' : 'Private document'}`)}
+                  className="flex-1 px-3 py-2 text-sm text-orange-600 hover:text-orange-700 transition-colors border border-orange-200 rounded-lg hover:bg-orange-50"
+                >
+                  <Eye className="w-4 h-4 inline mr-1" />
                   View
                 </button>
-                <button onClick={() => handleDownload(`${doc.name}.pdf`)} className="flex-1 flex items-center justify-center gap-1 px-3 py-2 text-sm bg-orange-100 text-orange-700 rounded hover:bg-orange-200">
-                  <Download className="w-4 h-4" />
+                <button 
+                  onClick={() => {
+                    const link = document.createElement('a');
+                    link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(`Document: ${doc.name}\nType: ${doc.type}\nSize: ${doc.size}\nUploaded: ${doc.date}\nShared: ${doc.shared ? 'Yes' : 'No'}`);
+                    link.download = doc.name.toLowerCase().replace(/\s+/g, '-') + '.txt';
+                    link.click();
+                  }}
+                  className="flex-1 px-3 py-2 text-sm bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors"
+                >
+                  <Download className="w-4 h-4 inline mr-1" />
                   Download
                 </button>
               </div>
             </div>
           ))}
         </div>
+
+
       </div>
     </div>
   );
@@ -3291,12 +3246,12 @@ For detailed content, please contact the administration.`;
         {activeTab === 'ai-validation' && renderAIValidation()}
         {activeTab === 'policy-management' && renderPolicyManagement()}
         {activeTab === 'laws-regulations' && renderLawsRegulations()}
-        {activeTab === 'compliance' && renderCompliance()}
+        {activeTab === 'digital-vault' && renderDigitalVault()}
         {activeTab === 'reports' && renderReports()}
       </div>
       
       <DonationModal />
-      <DocumentModal />
+
       <UploadModal />
       
       {/* Policy Upload Modal */}

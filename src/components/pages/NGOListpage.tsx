@@ -1,47 +1,50 @@
 import React from "react";
+import { useDashboard } from '../../contexts/DashboardContext';
 
-const ngos = [
+// Mock NGOs for display when no registered NGOs exist
+const mockNgos = [
   { 
-    id: 1, 
+    id: "1", 
     name: "Empower Women Initiative", 
     city: "Bangalore", 
-    registeredOn: "2025-09-25", 
-    focusAreas: ["Education", "Women Empowerment"],
+    date: "2025-09-25", 
+    focusArea: "Education, Women Empowerment",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-DwzAfyiO74EpS2Xz32tB2iQORYIbGtUr-w&s" 
   },
   { 
-    id: 2, 
+    id: "2", 
     name: "Green Future Trust",  
     city: "Hyderabad", 
-    registeredOn: "2025-09-20", 
-    focusAreas: ["Environment", "Healthcare"],
+    date: "2025-09-20", 
+    focusArea: "Environment, Healthcare",
     logo: "https://media.istockphoto.com/id/1351542181/photo/seedling-are-growing-from-the-rich-soil-concept-of-business-growth-profit-development-and.jpg?s=612x612&w=0&k=20&c=FR7d3FZyhwxxayN6HEZLSmjXHVS8WWo8nLJtH8fEiF4=" 
   },
   { 
-    id: 3, 
+    id: "3", 
     name: "Health Care NGO", 
     city: "Chennai", 
-    registeredOn: "2025-08-15", 
-    focusAreas: ["Healthcare", "Child Welfare"],
+    date: "2025-08-15", 
+    focusArea: "Healthcare, Child Welfare",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSRi1SxsFonnzf1zi1MZQFoCGHCBkB-Ze3Saw&s" 
   },
   { 
-    id: 4, 
+    id: "4", 
     name: "EduCare Society", 
     city: "Delhi", 
-    registeredOn: "2025-07-10", 
-    focusAreas: ["Education", "Skill Development"],
+    date: "2025-07-10", 
+    focusArea: "Education, Skill Development",
     logo: "https://www.visiongroup.in/images/gallery/img-8.jpg" 
   },
 ];
 
 export function NGOListPage() {
-  const goToDetails = (id: number) => {
+  const { ngoRegistrations } = useDashboard();
+  
+  // Combine registered NGOs with mock data for display
+  const allNgos = [...ngoRegistrations, ...mockNgos];
+  
+  const goToDetails = (id: string) => {
     window.location.href = `/ngos/${id}`;
-  };
-
-  const Back = () => {
-    window.location.href = "/RegisterNGO";
   };
 
   return (
@@ -52,66 +55,69 @@ export function NGOListPage() {
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 flex-1">
-        {ngos.map((ngo) => (
-          <div
-            key={ngo.id}
-            className="relative group bg-white shadow-lg rounded-2xl p-6 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer"
-            onClick={() => goToDetails(ngo.id)}
-          >
-            {/* NGO Logo */}
-            <div className="flex items-center mb-4">
-              <img 
-                src={ngo.logo} 
-                alt={ngo.name} 
-                className="w-26 h-26 rounded-full border-2 border-orange-500 mr-4 shadow-md"
-              />
-              <h2 className="text-xl font-semibold text-gray-900 group-hover:text-orange-600 transition">
-                {ngo.name}
-              </h2>
-            </div>
-
-            {/* City and Registered Date */}
-            <p className="text-gray-600 mb-2 flex items-center gap-2">
-              <span>📍</span> {ngo.city}
-            </p>
-            <p className="text-gray-600 mb-3 flex items-center gap-2">
-              <span>🗓</span> Registered: {ngo.registeredOn}
-            </p>
-
-            {/* Focus Areas */}
-            <div className="flex flex-wrap gap-2 mb-4">
-              {ngo.focusAreas.map((area, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 rounded-full text-sm font-medium shadow-sm"
-                >
-                  {area}
-                </span>
-              ))}
-            </div>
-
-            {/* View Details Button */}
-            <button
-              className="absolute bottom-4 right-4 px-4 py-2 bg-orange-500 text-white rounded-lg opacity-0 group-hover:opacity-100 shadow-lg hover:bg-orange-600 transition"
-              onClick={(e) => {
-                e.stopPropagation();
-                goToDetails(ngo.id);
-              }}
+        {allNgos.map((ngo) => {
+          const focusAreas = ngo.focusArea ? ngo.focusArea.split(', ') : [];
+          return (
+            <div
+              key={ngo.id}
+              className="relative group bg-white shadow-lg rounded-2xl p-8 hover:shadow-2xl transform hover:-translate-y-2 transition-all duration-300 cursor-pointer min-h-[400px]"
+              onClick={() => goToDetails(ngo.id)}
             >
-              View Details
-            </button>
-          </div>
-        ))}
+              {/* NGO Logo */}
+              <div className="flex flex-col items-center mb-6">
+                <img 
+                  src={ngo.logo || "https://via.placeholder.com/200x200?text=NGO"} 
+                  alt={ngo.name} 
+                  className="w-40 h-40 rounded-lg border-2 border-orange-500 mb-4 shadow-md object-cover"
+                />
+                <h2 className="text-2xl font-semibold text-gray-900 group-hover:text-orange-600 transition text-center">
+                  {ngo.name}
+                </h2>
+              </div>
+
+              {/* City and Registered Date */}
+              <p className="text-gray-600 mb-2 flex items-center gap-2">
+                <span>📍</span> {ngo.city}
+              </p>
+              <p className="text-gray-600 mb-3 flex items-center gap-2">
+                <span>🗓</span> Registered: {ngo.date}
+              </p>
+
+              {/* Focus Areas */}
+              <div className="flex flex-wrap gap-2 mb-6">
+                {focusAreas.map((area, index) => (
+                  <span
+                    key={index}
+                    className="px-4 py-2 bg-gradient-to-r from-orange-100 to-orange-200 text-orange-800 rounded-full text-sm font-medium shadow-sm"
+                  >
+                    {area.trim()}
+                  </span>
+                ))}
+              </div>
+
+              {/* View Details Button */}
+              <button
+                className="absolute bottom-6 right-6 px-6 py-3 bg-orange-500 text-white rounded-lg opacity-0 group-hover:opacity-100 shadow-lg hover:bg-orange-600 transition font-medium"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  goToDetails(ngo.id);
+                }}
+              >
+                View Details
+              </button>
+            </div>
+          );
+        })}
       </div>
 
-      {/* Back Button at Bottom */}
-      <div className="mt-8 flex justify-center">
+      {/* Back Button */}
+      <div className="mt-8 text-center">
         <button
           onClick={() => {
             localStorage.setItem('activeModule', 'RegisterNGO');
             window.location.href = "/";
           }}
-          className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition flex items-center gap-2"
+          className="px-6 py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition flex items-center gap-2 mx-auto"
         >
           ← Back to Register NGO
         </button>
