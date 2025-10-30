@@ -117,7 +117,6 @@ export function LandingPage() {
               <a href="#projects" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Projects</a>
               <a href="/campaigns" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Campaigns</a>
               <a href="#membership" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Membership</a>
-              <a href="#sector-networks" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Networks</a>
               <a href="#impact" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Impact</a>
               <a href="#contact" className="text-gray-700 hover:text-orange-600 font-medium transition-colors">Contact</a>
             </nav>

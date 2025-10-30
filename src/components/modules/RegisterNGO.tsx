@@ -10,14 +10,22 @@ export default function RegisteredNGOPage() {
   const [activeTab, setActiveTab] = useState("All");
   const [showBarGraph, setShowBarGraph] = useState(false); // State to highlight bar chart
 
-  // Combine mock data with actual NGO registrations
+  // Mock data for other registrations (non-NGO)
   const mockRegistrations = [
     { id: 1, name: "Priya Foundation", role: "Admin", date: "2025-09-25" },
     { id: 2, name: "John Smith", role: "Volunteer", date: "2025-09-28" },
     { id: 3, name: "Anita Rao", role: "Member", date: "2025-09-29" },
   ];
   
-  const registrations = [...ngoRegistrations, ...mockRegistrations];
+  // Mock NGOs for consistent count with NGOListPage
+  const mockNgos = [
+    { id: "mock1", name: "Empower Women Initiative", role: "NGO", date: "2025-09-25" },
+    { id: "mock2", name: "Green Future Trust", role: "NGO", date: "2025-09-20" },
+    { id: "mock3", name: "Health Care NGO", role: "NGO", date: "2025-08-15" },
+    { id: "mock4", name: "EduCare Society", role: "NGO", date: "2025-07-10" },
+  ];
+  
+  const registrations = [...ngoRegistrations, ...mockRegistrations, ...mockNgos];
 
   const monthlyData = [
     { month: "Jan", count: 8 },
@@ -37,11 +45,11 @@ export default function RegisteredNGOPage() {
     return regDate.getMonth() === now.getMonth() && regDate.getFullYear() === now.getFullYear();
   }).length;
 
-  const totalNGOs = registrations.filter(r => r.role === "NGO").length;
+  const totalNGOs = [...ngoRegistrations, ...mockNgos].length;
   const totalVolunteers = registrations.filter(r => r.role === "Volunteer").length;
   
   const stats = [
-    { label: "Total NGOs", value: totalNGOs, icon: Building2, color: "bg-blue-500", link: "/ngos" },
+    { label: "Total NGOs", value: totalNGOs, icon: Building2, color: "bg-blue-500", link: "/registered-ngos" },
     { label: "Volunteers", value: totalVolunteers, icon: Users, color: "bg-green-500", link: "/volunteers" },
     { label: "This Month", value: thisMonth, icon: CalendarDays, color: "bg-purple-500" }, // No link
   ];

@@ -81,8 +81,12 @@ function AppContent() {
   }
 
   // ✅ New NGO List Page
-  if (currentPage === '/ngos') {
-    return <NGOListPage />;
+  if (currentPage === '/ngos' || currentPage === '/registered-ngos') {
+    return (
+      <DashboardProvider>
+        <NGOListPage />
+      </DashboardProvider>
+    );
   }
 
   // ✅ New NGO Details Page (/ngos/1, /ngos/2, etc.)
